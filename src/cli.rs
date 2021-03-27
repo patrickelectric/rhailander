@@ -28,8 +28,16 @@ pub fn is_verbose() -> bool {
     return MANAGER.as_ref().clap_matches.is_present("verbose");
 }
 
+pub fn should_run_docker_purge() -> bool {
+    return !MANAGER.as_ref().clap_matches.is_present("no-docker-purge");
+}
+
 pub fn remote() -> &'static str {
     return MANAGER.as_ref().clap_matches.value_of("remote").unwrap();
+}
+
+pub fn version() -> &'static str {
+    return MANAGER.as_ref().clap_matches.value_of("version").unwrap();
 }
 
 // Return clap::ArgMatches struct
@@ -62,6 +70,11 @@ fn get_clap_matches<'a>() -> clap::ArgMatches<'a> {
                 .help("Sets the desired remote url to be used")
                 .takes_value(true)
                 .default_value("https://raw.githubusercontent.com/bluerobotics/companion-docker/"),
+        )
+        .arg(
+            clap::Arg::with_name("no-docker-purge")
+                .long("no-docker-purge")
+                .help("Do not remove any docker image locally available.")
         )
         .arg(
             clap::Arg::with_name("verbose")
