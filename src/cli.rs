@@ -36,6 +36,10 @@ pub fn remote() -> &'static str {
     return MANAGER.as_ref().clap_matches.value_of("remote").unwrap();
 }
 
+pub fn script() -> &'static str {
+    return MANAGER.as_ref().clap_matches.value_of("script").unwrap();
+}
+
 pub fn version() -> &'static str {
     return MANAGER.as_ref().clap_matches.value_of("version").unwrap();
 }
@@ -75,6 +79,13 @@ fn get_clap_matches<'a>() -> clap::ArgMatches<'a> {
             clap::Arg::with_name("no-docker-purge")
                 .long("no-docker-purge")
                 .help("Do not remove any docker image locally available.")
+        )
+        .arg(
+            clap::Arg::with_name("script")
+                .long("script")
+                .help("Choose a specific rhai script to run.")
+                .takes_value(true)
+                .default_value("main.rhai"),
         )
         .arg(
             clap::Arg::with_name("verbose")
