@@ -1,7 +1,6 @@
 use rhai::plugin::*;
 
 use super::cli;
-use super::helper::helper;
 use super::network::network;
 
 #[export_module]
