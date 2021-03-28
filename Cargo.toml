@@ -14,7 +14,8 @@ lazy_static = "1.4.0"
 fs2 = "0.4.3"
 nix = "0.20.0"
 reqwest = {version = "0.11", default-features = false, features = ["blocking", "rustls-tls"]}
-rhai = "0.19.14"
+# Waiting for shebang release
+rhai = { git = "https://github.com/rhaiscript/rhai", branch = "master" }
 shlex = "1.0.0"
 tempfile = "3.2.0"
 
