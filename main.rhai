@@ -1,15 +1,13 @@
 print("Running: " + system::operating_system());
 print("Architecture: " + system::architecture());
 
-companion::run_script("install/network/companion.service");
-return false;
-
-helper::run_remote_sh("https://gist.githubusercontent.com/patrickelectric/e53ae492d655bb4b488d4f59da5233f2/raw/0bf95ec390151ca695a8ea8017aa15897f25c653/simple.sh");
-
 print("Going to install companion.");
 print("Version: " + companion::version());
 print("Remote: " + companion::remote());
 
+run_rhai("test.rhai");
+
+// Check if everything is good to go!
 if system::architecture() != "arm" {
     throw("Architecture not supported!");
 }
@@ -27,6 +25,7 @@ if  disk_space_in_mb < 4096 {
     throw("Not enough space to install companion, at least 4GB required. Available: " + disk_space_in_mb + "MB");
 }
 
+// Install and enable docker
 if !helper::run_command("docker --version") {
     print("Docker not available, going to install it.");
     if !helper::run_remote_sh("https://get.docker.com") {
@@ -41,4 +40,10 @@ if !helper::run_command("systemctl enable docker") {
 
 const url = "https://raw.githubusercontent.com/patrickelectric/qmlonline/master/README.md";
 print("Downloading: " + url);
-print("Content: \n"+ network::download(url))
+print("Content: \n"+ network::download(url));
+
+
+companion::run_script("install/network/companion.service");
+return false;
+
+helper::run_remote_sh("https://gist.githubusercontent.com/patrickelectric/e53ae492d655bb4b488d4f59da5233f2/raw/0bf95ec390151ca695a8ea8017aa15897f25c653/simple.sh");

@@ -1,0 +1,2 @@
+#!rhailander --script
+print("what");
