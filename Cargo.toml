@@ -18,6 +18,7 @@ reqwest = {version = "0.11", default-features = false, features = ["blocking", "
 rhai = { git = "https://github.com/rhaiscript/rhai", branch = "master" }
 shlex = "1.0.0"
 tempfile = "3.2.0"
+termimad = "0.10.1"
 
 [build-dependencies]
 vergen = {version = "4", default-features = false, features = ["build", "git"]}
