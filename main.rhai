@@ -6,6 +6,15 @@ print("Version: " + companion::version());
 print("Remote: " + companion::remote());
 
 run_rhai("test.rhai");
+print("User: " + env("USER"));
+
+helper::run_sh_content(
+`
+#!/usr/bin/env bash
+echo "potao"
+echo "yes potato!"
+`
+);
 
 // Check if everything is good to go!
 if system::architecture() != "arm" {

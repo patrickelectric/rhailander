@@ -27,9 +27,7 @@ pub mod helper {
         };
     }
 
-    pub fn run_remote_sh(url: &str) -> bool {
-        let content = network::download(url);
-
+    pub fn run_sh_content(content: &str) -> bool {
         // Create temporary file to hold the content
         let mut file = match NamedTempFile::new() {
             Ok(file) => file,
@@ -48,8 +46,8 @@ pub mod helper {
             Ok(content) => content,
             Err(error) => {
                 println!(
-                    "Failed to keep temporary folder for: {}, reason: {:?}",
-                    url, error
+                    "Failed to keep temporary file to run script, reason: {:?}",
+                    error
                 );
                 return false;
             }
@@ -69,5 +67,10 @@ pub mod helper {
 
         // Execute it
         return run_command(&format!(r#"sh {}"#, &path));
+    }
+
+    pub fn run_remote_sh(url: &str) -> bool {
+        let content = network::download(url);
+        return run_sh_content(&content);
     }
 }
