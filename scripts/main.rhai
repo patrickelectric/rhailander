@@ -1,32 +1,38 @@
-print("Running: " + system::operating_system());
-print("Architecture: " + system::architecture());
+#!rhailander --script
 
-print("Going to install companion.");
-print("Version: " + companion::version());
-print("Remote: " + companion::remote());
+mprint("## **Starting companion installation process.**");
+mprint("Running: **" + system::operating_system() + "**");
+mprint("Architecture: **" + system::architecture() + "**");
 
-run_rhai("test.rhai");
-print("User: " + env("USER"));
+let companion_version = env("COMPANION_VERSION");
+let companion_remote = env("COMPANION_REMOTE");
 
-helper::run_sh_content(
-`
-#!/usr/bin/env bash
-echo "potao"
-echo "yes potato!"
-`
-);
+if companion_version == "" {
+    companion_version = "master"
+}
+
+if companion_remote == "" {
+    companion_remote = "https://raw.githubusercontent.com/bluerobotics/companion-docker"
+}
+
+
+mprint("### Going to install with the following configuration:");
+const repository_address = companion_remote + "/" + companion_version + "/";
+mprint("- URL: **" + repository_address +  "**" );
+mprint(" - Version: **" + companion_version + "**");
+mprint(" - Remote: **" + companion_remote + "**" );
 
 // Check if everything is good to go!
 if system::architecture() != "arm" {
-    throw("Architecture not supported!");
+    throw("Architecture not supported: " + system::architecture());
 }
 
 if !system::is_root() {
     throw("Program not running as root, aborting!");
 }
 
-if !companion::check_remote() {
-    throw("Remote is not available: " + companion::remote());
+if network::download(repository_address + "README.md") == "" {
+    throw("Remote is not available: " +repository_address);
 }
 
 const disk_space_in_mb = system::free_disk_space_in_mb();
@@ -36,7 +42,7 @@ if  disk_space_in_mb < 4096 {
 
 // Install and enable docker
 if !helper::run_command("docker --version") {
-    print("Docker not available, going to install it.");
+    mprint("**Docker** not available, going to install it.");
     if !helper::run_remote_sh("https://get.docker.com") {
         throw("Failed to install docker, please report this problem.");
     }
