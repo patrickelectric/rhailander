@@ -39,8 +39,12 @@ pub fn run_script(path: &str) -> bool {
     match engine.eval_file::<()>(std::path::PathBuf::from(path)) {
         Ok(_) => true,
         Err(error) => {
-            println!("Failed to run script: {}", path);
-            println!("Reason: {:?}", error);
+            markdown_print(&format!("Failed to run script: **{}**", path));
+            if let EvalAltResult::ErrorRuntime(message, _position) = *error {
+                markdown_print(&format!("Error: **{}**", message));
+            } else {
+                println!("Reason: {:?}", error);
+            }
             return false;
         }
     }
