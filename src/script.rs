@@ -10,10 +10,12 @@ pub fn env(name: &str) -> String {
     match std::env::var(name) {
         Ok(value) => value,
         Err(error) => {
-            println!(
-                "Failed to fetch environment variable ({}), error: {:?}",
-                name, error
-            );
+            if error != std::env::VarError::NotPresent {
+                println!(
+                    "Failed to fetch environment variable ({}), error: {:?}",
+                    name, error
+                );
+            }
             return String::new();
         }
     }
